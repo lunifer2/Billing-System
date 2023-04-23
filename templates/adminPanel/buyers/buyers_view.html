@@ -1,0 +1,21 @@
+{% extends 'layouts/master.html' %}
+
+{% block title %}
+    Buyer - Detail
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>This is buyer detail page</h1>
+    <hr>
+    <div class="card">
+        <div class="card-header" style="padding: 20px; border-radius: 45px;">
+            <h3>{{ data.first_name }}</h3>
+        </div>
+        <div class="card-body">
+            <h6>{{ data.email }}</h6>
+        </div>
+    </div>
+    <a href="{% url 'index-buyer' %}" class="btn btn-primary mt-3">BACK</a>
+</div>
+{% endblock %}

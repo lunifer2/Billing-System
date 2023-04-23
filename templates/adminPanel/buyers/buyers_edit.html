@@ -1,0 +1,83 @@
+{% extends 'layouts/master.html' %}
+
+{% block title %}
+    buyer - Edit
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1>This is buyer edit page</h1>
+            <hr>
+
+            <form action="{% url 'update-buyer' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ data.id }}" />
+                <input type="hidden" name="password" value="{{ data.password }}" />
+                <input type="hidden" name="username" value="{{ data.username }}" />
+                <input type="hidden" name="role" value="{{ data.role }}" />
+                <div class="form-group mb-2">
+                    <label class="mb-2">First Name</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="first_name"
+                        value="{{ data.first_name }}"
+                    >
+                </div>
+                <div class="form-group mb-2">
+                    <label class="mb-2">Last Name</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="last_name"
+                        value="{{ data.last_name }}"
+                    >
+                </div>
+                <div class="form-group mb-2">
+                    <label class="mb-2">Contact</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="contact"
+                        value="{{ data.contact }}"
+                    >
+                </div>
+                <div class="form-group mb-2">
+                    <label class="mb-2">Email</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        name="email"
+                        value="{{ data.email }}"
+                    >
+                </div>
+                <div class="form-group mb-2">
+                    <label class="mb-2">Address</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="address"
+                        value="{{ data.address }}"
+                    >
+                </div>
+                <div class="form-group mb-2">
+                    <label class="mb-2"> Gender</label>
+                    <select class="form-control" name="gender">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Others">Others</option>
+                      </select>
+                </div>
+                <input type="submit" class="btn btn-primary mt-2" value="UPDATE">
+                <a href="{% url 'index-buyer' %}" class="btn btn-primary mt-2">BACK</a>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+{% endblock %}
