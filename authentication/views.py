@@ -33,12 +33,12 @@ class LoginVew(View):
                 return redirect('index-buyer')
             elif user.role == "Buyer":
                 login(request, user)
-                messages.success(request, 'Buyer login success')
+                messages.success(request, 'Customer login success')
                 return redirect('index-buyer')
             else:
                 login(request, user)
-                messages.success(request, 'Customer Login success')
-                return redirect('index-seller')
+                messages.success(request, 'Seller Login success')
+                return redirect('seller-dashboard')
         else:
             messages.error(request, 'Invalid username or password')
             return redirect('login')

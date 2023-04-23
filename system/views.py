@@ -166,7 +166,3 @@ def seller_update(request):
         seller.save()
 
     return redirect('index-seller')
-
-#for seller panel
-def seller_dashboard(request):
-    return render(request,'sellerPanel/seller_dashboard.html')

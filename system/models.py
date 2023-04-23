@@ -81,7 +81,7 @@ class Item(models.Model):
     item_price = models.FloatField(default=00.00)
     item_image = models.ImageField(upload_to='Images/Items/')
     item_description = models.CharField(max_length=250)
-    seller_id = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    customusers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='items')
 
     def __str__(self):
         return self.item_name

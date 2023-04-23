@@ -1,0 +1,24 @@
+{% extends 'layouts/master.html' %}
+
+{% block title %}
+    Item - Add
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex-row justify-content-center">
+        
+        <div class="card p-2 mt-3" style="border-radius: 0%;
+         max-width: 75%;" >
+         <h1>This is item add page</h1>
+         <hr>
+          {% load crispy_forms_tags %}
+            <form action="{% url 'item-add' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-primary mt-3">ADD item</button>
+                <a href="{% url 'seller-dashboard' %}" class="btn btn-primary mt-3">BACK</a>
+              </form>
+        </div>
+</div>
+{% endblock %}
