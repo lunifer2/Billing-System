@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.views import View
-from system.models import Item
+from system.models import CustomUser, Order, Item
 from .forms import OrderCreateForm
 # Create your views here.
 def buyer_dashboard(request):
@@ -41,11 +41,39 @@ class Order_add_view(View):
 
         return redirect('/login/')
     
-def buyItem(request):
-    pass
+def buyItem(request, id):
+    if request.user.is_authenticated:
+        user_role = request.user.role
+        if user_role == "Buyer":
+         data = Item.objects.get(id=id)
+         context = {"data": data}
+        return render(request, 'buyerPanel/orders/order_items.html', context)
+    return redirect('/login/')
 
 def item_view(request, id):
     """ Shows the profile of a item """
-    data = Item.objects.get(id=id)
-    context = {"data": data}
-    return render(request, 'buyerPanel/items/items_view.html', context)
+    if request.user.is_authenticated:
+        user_role = request.user.role
+        if user_role == "Buyer":
+            data = Item.objects.get(id=id)
+            context = {"data": data}
+        return render(request, 'buyerPanel/items/items_view.html', context)
+    return redirect('/login/')
+
+def add_order(request, id):
+    if request.method == 'POST':
+        quantity = int(request.POST['quantity'])
+        item = Item.objects.get(id=id)
+        buyer = CustomUser.objects.get(user=request.user)
+        order = Order.objects.create(
+            order_quantity=quantity,
+            item_id=item,
+            customusers=buyer,
+            order_status='UnVerified'
+        )
+        order.save()
+        return redirect('buyer-dashboard')
+    else:
+        # item = Item.objects.get(id=id)
+        # return render(request, 'buyerPanel/orders/order_items.html', {'item': item})
+        return redirect('buyer-dashboard')

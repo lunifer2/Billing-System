@@ -38,7 +38,7 @@
                     <li class="list-group-item">An item</li>
                   </ul>
                   <div class="card-body">
-                    <a href="#" class="card-link">Buy</a>
+                    <a href="{% url 'order-item' id=val.id %}" class="card-link">Buy</a>
                     <a href="{% url 'item-view'  id=val.id %}" class="card-link">View</a>
                   </div>
               </div>
