@@ -1,0 +1,45 @@
+{% extends 'layouts/buyer_master.html' %}
+
+{% block title %}
+    Item - List
+{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    {% include "partials/_message.html" %}
+
+    <h1>Items</h1>
+    <hr>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+              <form class="d-flex" role="search" action="{% url 'buyer-dashboard' %}" method="POST">
+                {% csrf_token %}
+                <input style="height: 30px;" class="form-control me-2" type="text" name="search" placeholder="Search by first name." aria-label="Search">
+                <button class="btn btn-primary mb-3 mr-3" type="submit" style="height:30px; width: 160px; padding: 0px;"><i class="fa-solid fa-search"></i>Search</button>
+                <a href="{% url 'buyer-dashboard' %}" class="btn btn-primary mb-3 ml-2"  style="height:30px; width: 160px; padding: 0px; margin-left: 5px;">Clear</a>
+              </form>
+        </div>
+    </nav>
+    <div class="card" style="width: 18rem;">
+      {% for val in data %}
+        <img src="{{ val.item_image.url }}" width="50" class="card-img-top" alt="{{  val.item_name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ val.item_name }}</h5>
+          <p class="card-text">{{ val.item_description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">An item</li>
+        </ul>
+        <div class="card-body">
+          <a href="#" class="card-link">Buy</a>
+          <a href="#" class="card-link">View</a>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+{% endblock %}

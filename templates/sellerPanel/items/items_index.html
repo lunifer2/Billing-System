@@ -1,0 +1,60 @@
+{% extends 'layouts/seller_master.html' %}
+
+{% block title %}
+    Item - List
+{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    {% include "partials/_message.html" %}
+
+    <h1>This is Item list page</h1>
+    <hr>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+              <form class="d-flex" role="search" action="{% url 'item-index' %}" method="POST">
+                {% csrf_token %}
+                <input style="height: 30px;" class="form-control me-2" type="text" name="search" placeholder="Search by item name." aria-label="Search">
+                <button class="btn btn-primary mb-3 mr-3" type="submit" style="height:30px; width: 160px; padding: 0px;"><i class="fa-solid fa-search"></i>Search</button>
+                <a href="{% url 'item-index' %}" class="btn btn-primary mb-3 ml-2"  style="height:30px; width: 160px; padding: 0px; margin-left: 5px;">Clear</a>
+              </form>
+        </div>
+    </nav>
+    <a href="{% url 'item-add' %}" class="btn btn-primary mb-3"><i class="fa-solid fa-plus"></i> Add</a>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped-columns table-hover">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Photo</th>
+                        <th>Item Name</th>
+                        <th>Item Price</th>
+                        <th>Item Description</th>
+                        <th colspan="3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for val in data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><img src="{{ val.item_image.url }}" width="50"></td>
+                        <td>{{ val.item_name }}</td>
+                        <td>{{val.item_price}}</td>
+                        <td>{{val.item_description}}</td>
+                        <td><a href="{% url 'item-view' val.id %}"><i class="fa-solid fa-eye"></i></a></td>
+                        <td><a href="{% url 'item-edit' val.id %}"><i class="fa-solid fa-pencil"></i></a></td>
+                        <td><a href="{% url 'item-delete' val.id %}"><i class="fa-solid fa-trash"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

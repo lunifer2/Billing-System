@@ -34,7 +34,7 @@ class LoginVew(View):
             elif user.role == "Buyer":
                 login(request, user)
                 messages.success(request, 'Customer login success')
-                return redirect('index-buyer')
+                return redirect('buyer-dashboard')
             else:
                 login(request, user)
                 messages.success(request, 'Seller Login success')

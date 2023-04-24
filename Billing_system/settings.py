@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'authentication',
     'system',
     'Seller',
+    'Buyer',
     'crispy_forms',
     'crispy_bootstrap4',
 ]

@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from authentication.views import RegisterView
 from .forms import BillCreateForm, BuyerCreateForm, ItemCreateForm, OrderCreateForm, PaymentInfoCreateForm, SellerCreateForm
-from .models import Bill, Buyer, Seller, Item, Order
+from .models import Bill, Item, Order
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages

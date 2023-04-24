@@ -1,5 +1,5 @@
 from django import forms
-from .models import Bill, PaymentInfo ,Buyer, Seller, Order, Item, CustomUser
+from .models import Bill, PaymentInfo, Order, Item, CustomUser
 
 class PaymentInfoCreateForm(forms.ModelForm):
     """ Form class for payment info """
