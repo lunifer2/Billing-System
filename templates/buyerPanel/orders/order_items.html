@@ -18,7 +18,8 @@
     <div class="row">
           <div class="col-md-4">
               <div class="card mb-3">
-                
+                <form action="{% url 'order-add' id=data.id %}" method="post">
+                  {% csrf_token %}
                   <img src="{{ data.item_image.url }}" width="50" class="card-img-top" alt="{{  data.item_name }}">
                   <div class="card-body">
                     <h5 class="card-title">Name: {{ data.item_name }}</h5>
@@ -30,8 +31,9 @@
                     
                   </ul>
                   <div class="card-body">
-                    <a href="{% url 'order-add'  id=data.id %}" class="card-link">Confirm Order</a>
+                    <button type="submit" class="btn btn-primary mt-3">Confirm Order</button>
                   </div>
+                </form>
               </div>
               <a href="{% url 'buyer-dashboard' %}" class="btn btn-primary mt-3">BACK</a>
           </div>

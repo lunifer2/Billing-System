@@ -64,7 +64,7 @@ def add_order(request, id):
     if request.method == 'POST':
         quantity = int(request.POST['quantity'])
         item = Item.objects.get(id=id)
-        buyer = CustomUser.objects.get(user=request.user)
+        buyer = CustomUser.objects.get(id=request.user.id)
         order = Order.objects.create(
             order_quantity=quantity,
             item_id=item,
