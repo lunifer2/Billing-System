@@ -40,3 +40,12 @@ class Order_add_view(View):
             return redirect('buyer-dashboard')
 
         return redirect('/login/')
+    
+def buyItem(request):
+    pass
+
+def item_view(request, id):
+    """ Shows the profile of a item """
+    data = Item.objects.get(id=id)
+    context = {"data": data}
+    return render(request, 'buyerPanel/items/items_view.html', context)

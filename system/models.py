@@ -62,7 +62,8 @@ class Order(models.Model):
     """ Order Model """
     order_quantity = models.PositiveIntegerField(default=0)
     order_date = models.DateField(auto_now_add=True)
-    order_status = models.CharField(max_length=10,default="Verified")
+    order_status = models.CharField(max_length=10,default="UnVerified")
+    item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
     customusers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders')
 
     def __str__(self):

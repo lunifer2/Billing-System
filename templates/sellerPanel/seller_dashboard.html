@@ -25,22 +25,26 @@
               </form>
         </div>
     </nav>
-    <div class="card" style="width: 18rem;">
+    <div class="row">
       {% for val in data %}
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">{{ val.item_name }}</h5>
-          <p class="card-text">{{ val.item_description }}</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">An item</li>
-        </ul>
-        <div class="card-body">
-          <a href="#" class="card-link">Edit</a>
-          <a href="#" class="card-link">Remove</a>
-        </div>
+          <div class="col-md-4">
+              <div class="card mb-3">
+                  <img src="{{ val.item_image.url }}" width="50" class="card-img-top" alt="{{  val.item_name }}">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ val.item_name }}</h5>
+                    <p class="card-text">{{ val.item_description }}</p>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">An item</li>
+                  </ul>
+                  <div class="card-body">
+                    <a href="#" class="card-link">Edit</a>
+                    <a href="#" class="card-link">Remove</a>
+                  </div>
+              </div>
+          </div>
       {% endfor %}
-    </div>
+  </div>
     <a href="{% url 'item-add' %}" class="btn btn-primary mb-3"><i class="fa-solid fa-plus"></i> Add</a>
 </div>
 {% endblock %}
