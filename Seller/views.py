@@ -105,7 +105,9 @@ def order_index(request):
 def order_view(request, id):
     """ Shows the profile of a order """
     order = Order.objects.get(id=id)
-    context = {"order": order}
+    items = order.item_id_id.all()
+    bills = order.bill_set.all()
+    context = {"order": order, "items": items, "bills": bills}
     return render(request, 'sellerPanel/orders/orders_view.html', context)
 
 

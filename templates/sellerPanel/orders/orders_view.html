@@ -1,0 +1,36 @@
+{% extends 'layouts/seller_master.html' %}
+
+{% block title %}
+    Bill - Detail
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>This is Bill detail page</h1>
+    <hr>
+    <div class="card">
+        <h2>Order Details</h2>
+        <p>Order ID: {{ order.id }}</p>
+        <p>Order Quantity: {{ order.order_quantity }}</p>
+        <p>Order Date: {{ order.order_date }}</p>
+        <p>Order Status: {{ order.order_status }}</p>
+
+        <h2>Item Details</h2>
+        {% for item in items %}
+        <p>Item ID: {{ item.id }}</p>
+        <p>Item Name: {{ item.item_name }}</p>
+        <p>Item Price: {{ item.item_price }}</p>
+        {% endfor %}
+
+        <h2>Bill Details</h2>
+        {% for bill in bills %}
+        <p>Bill ID: {{ bill.id }}</p>
+        <p>Issue Date: {{ bill.issue_date }}</p>
+        <p>Paid Date: {% if bill.paid_date %}{{ bill.paid_date }}{% else %}Unpaid{% endif %}</p>
+        <p>Bill Status: {{ bill.bill_status }}</p>
+        {% endfor %}
+
+       
+    <a href="{% url 'order-index' %}" class="btn btn-primary mt-3">BACK</a>
+</div>
+{% endblock %}
