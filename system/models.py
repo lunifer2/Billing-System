@@ -60,15 +60,21 @@ class Item(models.Model):
 
 class Order(models.Model):
     """ Order Model """
+    VERIFIED = 'Verified'
+    UNVERIFIED= 'Unverified'
+    STATUS_CHOICES = [
+            (VERIFIED, 'Verified'),
+            (UNVERIFIED, 'Unverified')
+            ]
     order_quantity = models.PositiveIntegerField(default=0)
     order_date = models.DateField(auto_now_add=True)
-    order_status = models.CharField(max_length=10,default="UnVerified")
+    order_status = models.CharField(max_length=20, choices=STATUS_CHOICES,default= "Unverified")
     item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
     customusers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders')
     total_cost = models.FloatField(default=0.0)
 
     def __str__(self):
-        return self.order_date
+         return str(self.order_date)
     
     def save(self, *args, **kwargs):
         item_price = self.item_id.item_price
@@ -82,9 +88,15 @@ class Order(models.Model):
 
 class Bill(models.Model):
     """ Billing Model """
+    PAID = 'Paid'
+    UNPAID= 'Unpaid'
+    STATUS_CHOICES = [
+            (PAID, 'Paid'),
+            (UNPAID, 'Unpaid')
+            ]
     issue_date = models.DateTimeField(auto_now_add=True)
-    paid_date = models.DateTimeField(auto_now_add=True)
-    bill_status = models.CharField(max_length=10)
+    paid_date = models.DateTimeField(default=None, blank=True, null=True)
+    bill_status = models.CharField(max_length=10,choices=STATUS_CHOICES,default="Unpaid")
     customusers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='bills')
     order_id = models.ForeignKey(Order, on_delete=models.CASCADE)
 

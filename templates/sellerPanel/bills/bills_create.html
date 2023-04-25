@@ -1,0 +1,42 @@
+{% extends 'layouts/seller_master.html' %}
+
+{% block title %}
+    Item - List
+{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    {% include "partials/_message.html" %}
+
+    <h1>Bill</h1>
+    <hr>
+    <div class="row">
+          <div class="col-md-4">
+              <div class="card mb-3">
+                <form action="{% url 'bill-add' id=data.id %}" method="post">
+                  {% csrf_token %}
+                  <img src="{{ data.item_image.url }}" width="50" class="card-img-top" alt="{{  data.item_name }}">
+                  <div class="card-body">
+                    <h5 class="card-title">Name: {{ data.item_name }}</h5>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Description: {{ data.item_description }}</li>
+                    <li class="list-group-item">Price: {{ data.item_price }}</li>
+                    <li class="list-group-item">Quantity: <input type="number" name="quantity" required></li>
+                    
+                  </ul>
+                  <div class="card-body">
+                    <button type="submit" class="btn btn-primary mt-3">Confirm Order</button>
+                  </div>
+                </form>
+              </div>
+              <a href="{% url 'seller-dashboard' %}" class="btn btn-primary mt-3">BACK</a>
+          </div>
+  </div>
+</div>
+{% endblock %}
