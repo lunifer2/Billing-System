@@ -65,10 +65,17 @@ class Order(models.Model):
     order_status = models.CharField(max_length=10,default="UnVerified")
     item_id = models.ForeignKey(Item, on_delete=models.CASCADE)
     customusers = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='orders')
+    total_cost = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.order_date
     
+    def save(self, *args, **kwargs):
+        item_price = self.item_id.item_price
+        self.total_cost = item_price * self.order_quantity
+        super(Order, self).save(*args, **kwargs)
+
+
     class Meta:
         db_table = "Order"
 

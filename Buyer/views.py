@@ -57,7 +57,7 @@ def item_view(request, id):
         if user_role == "Buyer":
             data = Item.objects.get(id=id)
             context = {"data": data}
-        return render(request, 'buyerPanel/items/items_view.html', context)
+            return render(request, 'buyerPanel/items/items_view.html', context)
     return redirect('/login/')
 
 def add_order(request, id):
@@ -74,6 +74,4 @@ def add_order(request, id):
         order.save()
         return redirect('buyer-dashboard')
     else:
-        # item = Item.objects.get(id=id)
-        # return render(request, 'buyerPanel/orders/order_items.html', {'item': item})
         return redirect('buyer-dashboard')

@@ -19,7 +19,7 @@
         <div class="container-fluid">
               <form class="d-flex" role="search" action="{% url 'seller-dashboard' %}" method="POST">
                 {% csrf_token %}
-                <input style="height: 30px;" class="form-control me-2" type="text" name="search" placeholder="Search by first name." aria-label="Search">
+                <input style="height: 30px;" class="form-control me-2" type="text" name="search" placeholder="Search by item name." aria-label="Search">
                 <button class="btn btn-primary mb-3 mr-3" type="submit" style="height:30px; width: 160px; padding: 0px;"><i class="fa-solid fa-search"></i>Search</button>
                 <a href="{% url 'seller-dashboard' %}" class="btn btn-primary mb-3 ml-2"  style="height:30px; width: 160px; padding: 0px; margin-left: 5px;">Clear</a>
               </form>
@@ -31,14 +31,14 @@
               <div class="card mb-3">
                   <img src="{{ val.item_image.url }}" width="50" class="card-img-top" alt="{{  val.item_name }}">
                   <div class="card-body">
-                    <h5 class="card-title">{{ val.item_name }}</h5>
-                    <p class="card-text">{{ val.item_description }}</p>
+                    <h5 class="card-title">Name: {{ val.item_name }}</h5>
                   </div>
                   <ul class="list-group list-group-flush">
-                    <li class="list-group-item">An item</li>
+                    <li class="list-group-item">Description: {{ val.item_description }}</li>
+                    <li class="list-group-item">Price: {{ val.item_price }}</li>
                   </ul>
                   <div class="card-body">
-                    <a href="#" class="card-link">Edit</a>
+                    <a href="{% url 'item-edit' id=val.id %}" class="card-link">Edit</a>
                     <a href="{% url 'item-delete' id=val.id %}" class="card-link">Remove</a>
                   </div>
               </div>

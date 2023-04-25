@@ -2,12 +2,12 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib.auth.models import User
 from .forms import ItemCreateForm
-from system.models import Item, Bill, CustomUser
-
+from system.models import Item, Bill, CustomUser, Order
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def seller_dashboard(request):
     """ Returns the list of items """
-    item_list = Item.objects.all().order_by('id')
+    item_list = Item.objects.filter(customusers=request.user)
     context = {"data": item_list}
     if request.method == "POST":
         search = request.POST.get('search')
@@ -17,7 +17,7 @@ def seller_dashboard(request):
     return render(request,'sellerPanel/seller_dashboard.html',context)
 
 class Item_add_view(View):
-    """ This class adds the buyer """
+    """ This class adds the items """
 
     def get(self, request):
         if request.user.is_authenticated:
@@ -42,10 +42,11 @@ class Item_add_view(View):
             return redirect('seller-dashboard')
 
         return redirect('/login/')
-    
+
+@login_required(login_url='login')
 def item_index(request):
     """ Returns the list of items """
-    item_list = Item.objects.all().order_by('id')
+    item_list = Item.objects.filter(customusers=request.user).order_by('id')
     context = {"data": item_list}
     if request.method == "POST":
         search = request.POST.get('search')
@@ -87,3 +88,54 @@ def item_update(request):
         item.save()
 
     return redirect('index-seller')
+
+def order_index(request):
+    """ Returns the list of orders """
+    order_list = Order.objects.filter(item_id__customusers=request.user).order_by('id')
+    context = {"data": order_list}
+    if request.method == "POST":
+        search = request.POST.get('search')
+        order = Order.objects.filter(item_id__item_name__icontains=search)
+        context = {"data": order}
+        return render(request, 'sellerPanel/orders/orders_index.html', context)
+    return render(request,'sellerPanel/orders/orders_index.html',context)
+
+def order_view(request, id):
+    """ Shows the profile of a order """
+    data = Order.objects.get(id=id)
+    context = {"data": data}
+    return render(request, 'sellerPanel/orders/orders_view.html', context)
+
+
+def order_edit(request, id):
+    """ Edits the order of a item """
+    data = Order.objects.get(id=id)
+    context = {"data": data}
+
+    return render(request, 'sellerPanel/orders/orders_edit.html', context)
+
+
+def order_update(request):
+    if request.method == "POST":
+        item = Item.objects.get(id=request.POST.get('id'))
+        order = Order.objects.get(id=request.POST.get('id'))
+        order.item_name = request.POST.get('item_name')
+        order.item_price = request.POST.get('item_price')
+        order.item_description = request.POST.get('item_description')
+        order.item_id = item
+        order.customusers = request.user
+        order.save()
+
+    return redirect('index-seller')
+
+@login_required(login_url='login')
+def bill_index(request):
+    """ Returns the list of bills """
+    bill_list = Bill.objects.filter(customusers=request.user).order_by('id')
+    context = {"data": bill_list}
+    if request.method == "POST":
+        search = request.POST.get('search')
+        bills = Bill.objects.filter(item_name__icontains=search)
+        context = {"data": bills}
+        return render(request, 'sellerPanel/bills/bills_index.html', context)
+    return render(request,'sellerPanel/bills/bills_index.html',context)
