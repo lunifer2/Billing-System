@@ -1,4 +1,4 @@
-{% extends 'layouts/seller_master.html' %}
+{% extends 'layouts/buyer_master.html' %}
 
 {% block title %}
     Bill - Detail
@@ -38,6 +38,6 @@
         {% endfor %}
 
        
-    <a href="{% url 'seller-order-index' %}" class="btn btn-primary mt-3">BACK</a>
+    <a href="{% url 'order-index' %}" class="btn btn-primary mt-3">BACK</a>
 </div>
 {% endblock %}

@@ -39,7 +39,7 @@ class Item_add_view(View):
             item.item_price = request.POST.get('item_price')
             item.item_description = request.POST.get('item_description')
             item.item_image = request.FILES.get('item_image')
-            item.customusers = request.user
+            item.customusers_id = request.user.id
             item.save()
             return redirect('seller-dashboard')
 
@@ -151,7 +151,7 @@ def create_bill(request, order_id):
         order_id=order,
     )
     messages.success(request, 'Bill created successfully.')
-    return redirect('order-index')
+    return redirect('seller-order-index')
     # bills = Bill.objects.filter(customusers=order.customusers)
     # context= {"data": bills}
     # return render(request,'sellerPanel/bills/bills_view.html', context)
@@ -164,9 +164,6 @@ class Bill_add_view(View):
             var = order_id
             user_role = request.user.role
             if user_role == "Seller":
-                # quantiy=Order.objects.get("total_quantity")
-                # totalCost = Order.objects.get("total_cost")
-                # orderDate = Order.object.get("order")
                 orderDetail = Order.objects.filter(id=var)
                 order = get_object_or_404(Order, pk=order_id)
                 context = { "order": order,"od":orderDetail }

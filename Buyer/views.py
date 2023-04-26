@@ -1,7 +1,9 @@
-from django.shortcuts import redirect, render
+from datetime import datetime
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
-from system.models import CustomUser, Order, Item
-from .forms import OrderCreateForm
+from system.models import CustomUser, Order, Item, Bill
+from .forms import OrderCreateForm, PaymentCreateForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def buyer_dashboard(request):
     """ Returns the list of items """
@@ -75,3 +77,50 @@ def add_order(request, id):
         return redirect('buyer-dashboard')
     else:
         return redirect('buyer-dashboard')
+
+
+def order_index(request):
+    """ Returns the list of orders """
+    verified_orders = Order.objects.filter(customusers=request.user, order_status='Verified')
+    bills = Bill.objects.filter(order_id__in=verified_orders)
+    context = {"data": bills}
+    if request.method == "POST":
+        search = request.POST.get('search')
+        bills = Bill.objects.filter(order_id__item_id__item_name__icontains=search, order_id__customusers=request.user, order_id__order_status='Verified')
+        context = {"data": bills}
+        return render(request,'buyerPanel/orders/order_index.html', context)
+    return render(request,'buyerPanel/orders/order_index.html', context)
+
+
+@login_required(login_url='login')
+# def bill_index(request, id):
+#     """ Shows the profile of an order """
+#     order = Order.objects.select_related('item_id__customusers').get(id=id)
+#     bills = Bill.objects.select_related('order_id__customusers').get(id=id)
+#     item = order.item_id
+#     bills = Bill.objects.filter(order_id=id)
+#     context = {"order": order, "item": item, "bills": bills}
+#     return render(request, 'buyerPanel/orders/orders_view.html', context)
+def bill_index(request,bill_id):
+    """ Returns the list of orders """
+    verified_orders = Order.objects.filter(customusers=request.user, order_status='Verified')
+    bills = Bill.objects.filter(order_id__in=verified_orders)
+    context = {"data": bills}
+    return render(request,'buyerPanel/orders/order_view.html', context)
+
+
+def payment_create(request, bill_id):
+    bill = get_object_or_404(Bill, id=bill_id)
+    if request.method == 'POST':
+        payment_form = PaymentCreateForm(request.POST)
+        if payment_form.is_valid():
+            payment_info = payment_form.save(commit=False)
+            payment_info.customusers = request.user
+            payment_info.save()
+            bill.bill_status = Bill.PAID
+            bill.paid_date = datetime.now()
+            bill.save()
+            return redirect('order-index')
+    else:
+        form = PaymentCreateForm()
+    return render(request, 'buyerPanel/payments/payment_create.html', {'form': form, 'bill':bill})

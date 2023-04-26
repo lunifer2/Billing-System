@@ -11,5 +11,5 @@ class BillCreateForm(forms.ModelForm):
 class ItemCreateForm(forms.ModelForm):
     """ Form class for item creation """
     class Meta:
-        fields = "__all__"
+        fields = ["item_name", "item_description", "item_image", "item_price"]
         model = Item
