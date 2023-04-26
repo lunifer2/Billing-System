@@ -8,14 +8,21 @@
 <div class="container mt-5">
     <h1>This is buyer detail page</h1>
     <hr>
-    <div class="card">
-        <div class="card-header" style="padding: 20px; border-radius: 45px;">
-            <h3>{{ data.first_name }}</h3>
-        </div>
-        <div class="card-body">
-            <h6>{{ data.email }}</h6>
-        </div>
-    </div>
+    <h1>Username: {{ data.username }}</h1>
+    <p>First Name: {{ data.first_name }}</p>
+    <p>Last Name: {{ data.last_name }}</p>
+    <p>Address: {{ data.address }}</p>
+    <p>Contact: {{ data.contact }}</p>
+    <p>Email: {{ data.email }}</p>
+
+    <h2>Bills</h2>
+    <ul>
+    {% for bill in bill %}
+        <li>Bill ID: {{ bill.id }}, Bill Status: {{ bill.bill_status }}</li>
+    {% empty %}
+        <li>No bills yet.</li>
+    {% endfor %}
+    </ul>
     <a href="{% url 'index-buyer' %}" class="btn btn-primary mt-3">BACK</a>
 </div>
 {% endblock %}

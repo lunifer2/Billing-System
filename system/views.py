@@ -64,12 +64,19 @@ def buyer_delete(request, id):
 
 
 @login_required(login_url='login')
-def buyer_view(request, id):
-    """ Shows the profile of a Buyer """
+def seller_view(request, id):
+    """ Shows the profile of a seller """
     data = CustomUser.objects.get(id=id)
     context = {"data": data}
-    return render(request, 'adminPanel/buyers/buyers_view.html', context)
+    return render(request, 'adminPanel/sellers/sellers_view.html', context)
 
+@login_required(login_url='login')
+def buyer_view(request, id):
+    """ Shows the profile of a buyer """
+    data = CustomUser.objects.get(id=id)
+    bill = Bill.objects.filter(customusers_id=id)
+    context = {"data": data, "bill":bill}
+    return render(request, 'adminPanel/buyers/buyers_view.html', context)
 
 @login_required(login_url='login')
 def buyer_edit(request, id):
@@ -143,12 +150,7 @@ def seller_delete(request, id):
     return redirect("index-seller")
 
 
-@login_required(login_url='login')
-def seller_view(request, id):
-    """ Shows the profile of a seller """
-    data = CustomUser.objects.get(id=id)
-    context = {"data": data}
-    return render(request, 'adminPanel/sellers/sellers_view.html', context)
+
 
 
 @login_required(login_url='login')

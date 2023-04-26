@@ -12,7 +12,8 @@ from django.contrib import messages
 def seller_dashboard(request):
     """ Returns the list of items """
     item_list = Item.objects.filter(customusers=request.user)
-    context = {"data": item_list}
+    total_earnings = CustomUser.objects.filter(id=request.user.id).values_list('total_earnings', flat=True).first()
+    context = {"data": item_list, "earn": total_earnings}
     if request.method == "POST":
         search = request.POST.get('search')
         items = Item.objects.filter(item_name__icontains=search)

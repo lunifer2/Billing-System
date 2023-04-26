@@ -12,9 +12,9 @@
 <div class="container mt-5">
 
     {% include "partials/_message.html" %}
-
-    <h1>Items</h1>
-    <hr>
+      <h1>Items</h1>
+      <h3>Total Earnings: {{ earn }}</h3> 
+      <hr>
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
               <form class="d-flex" role="search" action="{% url 'seller-dashboard' %}" method="POST">
