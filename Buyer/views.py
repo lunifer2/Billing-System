@@ -123,7 +123,25 @@ def bill_index(request, id):
     return render(request, 'buyerPanel/orders/orders_view.html', context)
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
+# def payment_create(request, bill_id):
+#     bill = get_object_or_404(Bill, id=bill_id)
+#     if request.method == 'POST':
+#         payment_form = PaymentCreateForm(request.POST)
+#         if payment_form.is_valid():
+#             payment_info = payment_form.save(commit=False)
+#             payment_info.customusers = request.user
+#             payment_info.save()
+#             bill.bill_status = Bill.PAID
+#             bill.paid_date = datetime.now()
+#             bill.save()
+#             return redirect('order-index')
+#     else:
+#         form = PaymentCreateForm()
+#     return render(request, 'buyerPanel/payments/payment_create.html', {'form': form, 'bill': bill})
+
+
+
 def payment_create(request, bill_id):
     bill = get_object_or_404(Bill, id=bill_id)
     if request.method == 'POST':
@@ -135,6 +153,13 @@ def payment_create(request, bill_id):
             bill.bill_status = Bill.PAID
             bill.paid_date = datetime.now()
             bill.save()
+            
+            # Update total earnings for the seller
+            seller = bill.order_id.item_id.customusers
+            if bill.bill_status == Bill.PAID:
+                earnings = seller.total_earnings + bill.order_id.total_cost
+                CustomUser.objects.filter(id=seller.id).update(total_earnings=earnings)
+            
             return redirect('order-index')
     else:
         form = PaymentCreateForm()
