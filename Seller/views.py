@@ -104,19 +104,17 @@ def order_index(request):
 
 def order_view(request, id):
     """ Shows the profile of a order """
-    order = Order.objects.get(id=id)
-    items = order.item_id_id.all()
-    bills = order.bill_set.all()
-    context = {"order": order, "items": items, "bills": bills}
+    order_list = Order.objects.filter(item_id__customusers=request.user).order_by('id')
+    context = {"order": order_list}
     return render(request, 'sellerPanel/orders/orders_view.html', context)
 
 
-def order_edit(request, id):
-    """ Edits the order of a item """
-    data = Order.objects.get(id=id)
-    context = {"data": data}
+# def order_edit(request, id):
+#     """ Edits the order of a item """
+#     data = Order.objects.get(id=id)
+#     context = {"data": data}
 
-    return render(request, 'sellerPanel/orders/orders_edit.html', context)
+#     return render(request, 'sellerPanel/orders/orders_edit.html', context)
 
 
 # def order_update(request):
@@ -133,16 +131,14 @@ def order_edit(request, id):
 #     return redirect('index-seller')
 
 @login_required(login_url='login')
-def bill_index(request):
-    """ Returns the list of bills """
-    bill_list = Bill.objects.filter(customusers=request.user).order_by('id')
-    context = {"data": bill_list}
-    if request.method == "POST":
-        search = request.POST.get('search')
-        bills = Bill.objects.filter(item_name__icontains=search)
-        context = {"data": bills}
-        return render(request, 'sellerPanel/bills/bills_index.html', context)
-    return render(request,'sellerPanel/bills/bills_index.html',context)
+def bill_index(request, id):
+    """ Shows the profile of an order """
+    order = Order.objects.select_related('item_id__customusers').get(id=id)
+    item = order.item_id
+    bills = Bill.objects.filter(order_id=id)
+    context = {"order": order, "item": item, "bills": bills}
+    return render(request, 'sellerPanel/orders/orders_view.html', context)
+
 
 def create_bill(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
