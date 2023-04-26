@@ -106,14 +106,6 @@ def order_index(request):
 
 
 @login_required(login_url='login')
-# def bill_index(request, id):
-#     """ Shows the profile of an order """
-#     order = Order.objects.select_related('item_id__customusers').get(id=id)
-#     bills = Bill.objects.select_related('order_id__customusers').get(id=id)
-#     item = order.item_id
-#     bills = Bill.objects.filter(order_id=id)
-#     context = {"order": order, "item": item, "bills": bills}
-#     return render(request, 'buyerPanel/orders/orders_view.html', context)
 def bill_index(request, id):
     """ Returns the list of orders """
     verified_orders = Order.objects.filter(
@@ -122,26 +114,7 @@ def bill_index(request, id):
     context = {"data": bills}
     return render(request, 'buyerPanel/orders/orders_view.html', context)
 
-
-# @login_required(login_url='login')
-# def payment_create(request, bill_id):
-#     bill = get_object_or_404(Bill, id=bill_id)
-#     if request.method == 'POST':
-#         payment_form = PaymentCreateForm(request.POST)
-#         if payment_form.is_valid():
-#             payment_info = payment_form.save(commit=False)
-#             payment_info.customusers = request.user
-#             payment_info.save()
-#             bill.bill_status = Bill.PAID
-#             bill.paid_date = datetime.now()
-#             bill.save()
-#             return redirect('order-index')
-#     else:
-#         form = PaymentCreateForm()
-#     return render(request, 'buyerPanel/payments/payment_create.html', {'form': form, 'bill': bill})
-
-
-
+@login_required(login_url='login')
 def payment_create(request, bill_id):
     bill = get_object_or_404(Bill, id=bill_id)
     if request.method == 'POST':

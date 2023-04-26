@@ -2,7 +2,7 @@ from datetime import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.contrib.auth.models import User
-from .forms import ItemCreateForm, BillCreateForm
+from .forms import ItemCreateForm
 from system.models import Item, Bill, CustomUser, Order
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -147,9 +147,6 @@ def create_bill(request, order_id):
     )
     messages.success(request, 'Bill created successfully.')
     return redirect('seller-order-index')
-    # bills = Bill.objects.filter(customusers=order.customusers)
-    # context= {"data": bills}
-    # return render(request,'sellerPanel/bills/bills_view.html', context)
 
 
 class Bill_add_view(View):

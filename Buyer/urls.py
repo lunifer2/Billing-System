@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import buyer_dashboard, Order_add_view, item_view, buyItem, add_order, order_index, bill_index, payment_create
+from .views import buyer_dashboard , Order_add_view, item_view, buyItem, add_order, order_index, bill_index, payment_create
 urlpatterns = [
     path('dashboard/',views.buyer_dashboard, name='buyer-dashboard'),
     path('order/add/<int:id>/',views.add_order, name='order-add'),

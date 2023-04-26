@@ -8,12 +8,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import CustomUser
 # Create your views here.
-# for admin panel 
+# for admin panel
+
+
 @login_required(login_url='login')
 def index(request):
     user = request.user
-    context = {"data":user}
+    context = {"data": user}
     return render(request, 'adminPanel/buyers_index.html', context)
+
 
 class Buyer_add_view(View):
     """ This class adds the buyer """
@@ -27,16 +30,17 @@ class Buyer_add_view(View):
 
     def post(self, request):
         if request.user.is_authenticated:
-         buyer_view = RegisterView()
-         response =buyer_view.post(request)
-         # check if account was created successfully
-         if response.status_code == 302:
-            # stay on the same page
-            return render(request, 'adminPanel/buyers/buyers_index.html')
-         # if account creation failed, return the response
-         return response
+            buyer_view = RegisterView()
+            response = buyer_view.post(request)
+            # check if account was created successfully
+            if response.status_code == 302:
+                # stay on the same page
+                return render(request, 'adminPanel/buyers/buyers_index.html')
+            # if account creation failed, return the response
+            return response
         return redirect('/login/')
-    
+
+
 @login_required(login_url='login')
 def buyer_index(request):
     """ Returns the list of buyer """
@@ -44,10 +48,12 @@ def buyer_index(request):
     context = {"data": buyer_list}
     if request.method == "POST":
         search = request.POST.get('search')
-        buyers = CustomUser.objects.filter(role="Buyer",first_name__icontains=search)
+        buyers = CustomUser.objects.filter(
+            role="Buyer", first_name__icontains=search)
         context = {"data": buyers}
         return render(request, 'adminPanel/buyers/buyers_index.html', context)
     return render(request, 'adminPanel/buyers/buyers_index.html', context)
+
 
 @login_required(login_url='login')
 def buyer_delete(request, id):
@@ -91,6 +97,7 @@ def buyer_update(request):
 
     return redirect('index-buyer')
 
+
 class Seller_add_view(View):
     """ This class adds the seller """
 
@@ -103,16 +110,17 @@ class Seller_add_view(View):
 
     def post(self, request):
         if request.user.is_authenticated:
-         seller_view = RegisterView()
-         response =seller_view.post(request)
-         # check if account was created successfully
-         if response.status_code == 302:
-            # stay on the same page
-            return render(request, 'adminPanel/sellers/sellers_index.html')
-         # if account creation failed, return the response
-         return response
+            seller_view = RegisterView()
+            response = seller_view.post(request)
+            # check if account was created successfully
+            if response.status_code == 302:
+                # stay on the same page
+                return render(request, 'adminPanel/sellers/sellers_index.html')
+            # if account creation failed, return the response
+            return response
         return redirect('/login/')
-    
+
+
 @login_required(login_url='login')
 def seller_index(request):
     """ Returns the list of seller """
@@ -120,10 +128,12 @@ def seller_index(request):
     context = {"data": seller_list}
     if request.method == "POST":
         search = request.POST.get('search')
-        sellers = CustomUser.objects.filter(role="Seller", first_name__icontains=search)
+        sellers = CustomUser.objects.filter(
+            role="Seller", first_name__icontains=search)
         context = {"data": sellers}
         return render(request, 'adminPanel/sellers/sellers_index.html', context)
     return render(request, 'adminPanel/sellers/sellers_index.html', context)
+
 
 @login_required(login_url='login')
 def seller_delete(request, id):
