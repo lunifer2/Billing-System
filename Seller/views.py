@@ -7,6 +7,8 @@ from system.models import Item, Bill, CustomUser, Order
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # Create your views here.
+
+@login_required(login_url='login')
 def seller_dashboard(request):
     """ Returns the list of items """
     item_list = Item.objects.filter(customusers=request.user)
@@ -16,7 +18,8 @@ def seller_dashboard(request):
         items = Item.objects.filter(item_name__icontains=search)
         context = {"data": items}
         return render(request, 'sellerPanel/seller_dashboard.html', context)
-    return render(request,'sellerPanel/seller_dashboard.html',context)
+    return render(request, 'sellerPanel/seller_dashboard.html', context)
+
 
 class Item_add_view(View):
     """ This class adds the items """
@@ -32,18 +35,19 @@ class Item_add_view(View):
 
     def post(self, request):
         if request.user.is_authenticated:
-         user_role = request.user.role
-         if user_role == "Seller":
-            item = Item()
-            item.item_name = request.POST.get('item_name')
-            item.item_price = request.POST.get('item_price')
-            item.item_description = request.POST.get('item_description')
-            item.item_image = request.FILES.get('item_image')
-            item.customusers_id = request.user.id
-            item.save()
-            return redirect('seller-dashboard')
+            user_role = request.user.role
+            if user_role == "Seller":
+                item = Item()
+                item.item_name = request.POST.get('item_name')
+                item.item_price = request.POST.get('item_price')
+                item.item_description = request.POST.get('item_description')
+                item.item_image = request.FILES.get('item_image')
+                item.customusers_id = request.user.id
+                item.save()
+                return redirect('seller-dashboard')
 
         return redirect('/login/')
+
 
 @login_required(login_url='login')
 def item_index(request):
@@ -55,8 +59,10 @@ def item_index(request):
         items = Item.objects.filter(item_name__icontains=search)
         context = {"data": items}
         return render(request, 'sellerPanel/items/items_index.html', context)
-    return render(request,'sellerPanel/items/items_index.html',context)
+    return render(request, 'sellerPanel/items/items_index.html', context)
 
+
+@login_required(login_url='login')
 def item_delete(request, id):
     """ Deletes the items """
     data = Item.objects.get(id=id)
@@ -64,6 +70,7 @@ def item_delete(request, id):
     return redirect("seller-dashboard")
 
 
+@login_required(login_url='login')
 def item_view(request, id):
     """ Shows the profile of a item """
     data = Item.objects.get(id=id)
@@ -71,6 +78,7 @@ def item_view(request, id):
     return render(request, 'sellerPanel/items/items_view.html', context)
 
 
+@login_required(login_url='login')
 def item_edit(request, id):
     """ Edits the profile of a item """
     data = Item.objects.get(id=id)
@@ -79,6 +87,7 @@ def item_edit(request, id):
     return render(request, 'sellerPanel/items/items_edit.html', context)
 
 
+@login_required(login_url='login')
 def item_update(request):
     if request.method == "POST":
         item = Item.objects.get(id=request.POST.get('id'))
@@ -91,44 +100,29 @@ def item_update(request):
 
     return redirect('index-seller')
 
+
+@login_required(login_url='login')
 def order_index(request):
     """ Returns the list of orders """
-    order_list = Order.objects.filter(item_id__customusers=request.user).order_by('id')
+    order_list = Order.objects.filter(
+        item_id__customusers=request.user).order_by('id')
     context = {"data": order_list}
     if request.method == "POST":
         search = request.POST.get('search')
         order = Order.objects.filter(item_id__item_name__icontains=search)
         context = {"data": order}
         return render(request, 'sellerPanel/orders/orders_index.html', context)
-    return render(request,'sellerPanel/orders/orders_index.html',context)
+    return render(request, 'sellerPanel/orders/orders_index.html', context)
 
+
+@login_required(login_url='login')
 def order_view(request, id):
     """ Shows the profile of a order """
-    order_list = Order.objects.filter(item_id__customusers=request.user).order_by('id')
+    order_list = Order.objects.filter(
+        item_id__customusers=request.user).order_by('id')
     context = {"order": order_list}
     return render(request, 'sellerPanel/orders/orders_view.html', context)
 
-
-# def order_edit(request, id):
-#     """ Edits the order of a item """
-#     data = Order.objects.get(id=id)
-#     context = {"data": data}
-
-#     return render(request, 'sellerPanel/orders/orders_edit.html', context)
-
-
-# def order_update(request):
-#     if request.method == "POST":
-#         item = Item.objects.get(id=request.POST.get('id'))
-#         order = Order.objects.get(id=request.POST.get('id'))
-#         order.item_name = request.POST.get('item_name')
-#         order.item_price = request.POST.get('item_price')
-#         order.item_description = request.POST.get('item_description')
-#         order.item_id = item
-#         order.customusers = request.user
-#         order.save()
-
-#     return redirect('index-seller')
 
 @login_required(login_url='login')
 def bill_index(request, id):
@@ -140,6 +134,7 @@ def bill_index(request, id):
     return render(request, 'sellerPanel/orders/orders_view.html', context)
 
 
+@login_required(login_url='login')
 def create_bill(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     order.order_status = Order.VERIFIED
@@ -156,6 +151,7 @@ def create_bill(request, order_id):
     # context= {"data": bills}
     # return render(request,'sellerPanel/bills/bills_view.html', context)
 
+
 class Bill_add_view(View):
     """ This class adds the bill """
 
@@ -166,7 +162,7 @@ class Bill_add_view(View):
             if user_role == "Seller":
                 orderDetail = Order.objects.filter(id=var)
                 order = get_object_or_404(Order, pk=order_id)
-                context = { "order": order,"od":orderDetail }
+                context = {"order": order, "od": orderDetail}
                 return render(request, 'sellerPanel/bills/bills_add.html', context)
         return redirect('/login/')
 
@@ -178,14 +174,13 @@ class Bill_add_view(View):
                 seller = CustomUser.objects.get(id=request.user.id)
                 bill_status = request.POST.get('bill_status')
                 bill = Bill.objects.create(
-                    bill_status = bill_status,
-                    order_id =order,
-                    customusers = seller
+                    bill_status=bill_status,
+                    order_id=order,
+                    customusers=seller
                 )
-                 # Check if the bill is paid and set the paid_date accordingly
+                # Check if the bill is paid and set the paid_date accordingly
                 if bill.bill_status == 'paid':
                     bill.paid_date = timezone.now()
                 bill.save()
                 return redirect('bill-index')
         return redirect('/login/')
-

@@ -19,7 +19,7 @@
         <div class="container-fluid">
               <form class="d-flex" role="search" action="{% url 'index-seller' %}" method="POST">
                 {% csrf_token %}
-                <input style="height: 30px;" class="form-control me-2" type="text" name="search" placeholder="Search by first name." aria-label="Search">
+                <input style="height: 30px;" class="form-control me-2" type="text" name="search" placeholder="Search by first name." aria-label="Search" required>
                 <button class="btn btn-primary mb-3 mr-3" type="submit" style="height:30px; width: 160px; padding: 0px;"><i class="fa-solid fa-search"></i>Search</button>
                 <a href="{% url 'index-seller' %}" class="btn btn-primary mb-3 ml-2"  style="height:30px; width: 160px; padding: 0px; margin-left: 5px;">Clear</a>
               </form>
